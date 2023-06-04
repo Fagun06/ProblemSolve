@@ -1,0 +1,45 @@
+//problem link:https://www.hackerearth.com/practice/algorithms/graphs/topological-sort/practice-problems/algorithm/reach-the-queen-c12a82bf/
+
+solution:
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int MOD = 1e9 + 7;
+const int MAX_N = 100001;
+
+vector<int> adj[MAX_N];
+int dp[MAX_N];
+
+int dfs(int u) {
+    if (dp[u] != -1)
+        return dp[u];
+
+    int ways = 0;
+    for (int v : adj[u])
+        ways = (ways + dfs(v)) % MOD;
+
+    return dp[u] = ways;
+}
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+    }
+
+    for (int i = 1; i <= n; i++)
+        dp[i] = -1;
+
+    dp[n] = 1; 
+    int ways = dfs(1);
+    cout << ways << endl;
+
+    return 0;
+}
